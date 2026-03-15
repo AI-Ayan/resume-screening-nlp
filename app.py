@@ -35,20 +35,27 @@ def extract_text(file):
 
 if st.button("Screen Resumes"):
 
+    if not job_description.strip():
+        st.error("Please enter a job description.")
+        st.stop()
+
+    if not uploaded_files:
+        st.error("Please upload at least one resume.")
+        st.stop()
+
+    st.success("Resumes successfully analyzed! Here are the results:")
+
     resumes = []
     resume_names = []
 
     for file in uploaded_files:
-
         text = extract_text(file)
-
         resumes.append(text)
         resume_names.append(file.name)
 
     documents = resumes + [job_description]
 
     vectorizer = TfidfVectorizer()
-
     tfidf_matrix = vectorizer.fit_transform(documents)
 
     similarity = cosine_similarity(tfidf_matrix[-1], tfidf_matrix[:-1])
@@ -57,15 +64,30 @@ if st.button("Screen Resumes"):
 
     results = pd.DataFrame({
         "Resume": resume_names,
-        "Match Score": scores
+        "Match Score": scores * 100
     })
 
     results = results.sort_values(by="Match Score", ascending=False)
+    results["Match Score"] = results["Match Score"].round(2)
+
+    top_candidates = results.head(3)
+
+    st.subheader("🏆 Top Candidates")
+
+    for i, row in top_candidates.iterrows():
+        st.write(f"{row['Resume']} — Match Score: {row['Match Score']}%")
 
     st.subheader("Resume Ranking")
-
     st.dataframe(results)
 
-    st.subheader("Match Score Chart")
+    csv = results.to_csv(index=False).encode("utf-8")
 
+    st.download_button(
+        label="Download Results as CSV",
+        data=csv,
+        file_name="resume_screening_results.csv",
+        mime="text/csv"
+    )
+
+    st.subheader("Match Score Chart")
     st.bar_chart(results.set_index("Resume"))

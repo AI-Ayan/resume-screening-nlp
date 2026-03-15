@@ -57,3 +57,21 @@ resume-screening-nlp
     ├── resume1.txt
     ├── resume2.txt
     └── resume3.txt
+
+## Key Highlights
+- AI-powered resume ranking system
+- Supports PDF and TXT resume formats
+- Uses Natural Language Processing (TF-IDF)
+- Cosine similarity for matching resumes with job descriptions
+- Interactive web interface built with Streamlit
+
+## Example Output
+
+Top Candidates:
+1. resume1.txt – Match Score: 82%
+2. resume2.txt – Match Score: 74%
+3. resume3.txt – Match Score: 65%
+
+The system also displays:
+- Resume ranking table
+- Match score bar chart
