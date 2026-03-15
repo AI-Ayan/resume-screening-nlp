@@ -4,6 +4,7 @@ import PyPDF2
 import re
 
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS
 from sklearn.metrics.pairwise import cosine_similarity
 
 
@@ -37,7 +38,9 @@ def extract_text(file):
 
 def extract_keywords(text):
     words = re.findall(r'\b[a-zA-Z]+\b', text.lower())
-    return set(words)
+    keywords = [word for word in words if word not in ENGLISH_STOP_WORDS]
+
+    return set(keywords)
 
 
 if st.button("Screen Resumes"):
