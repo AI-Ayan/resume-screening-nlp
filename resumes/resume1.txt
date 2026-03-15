@@ -1,0 +1,1 @@
+Python developer with experience in machine learning, pandas, numpy, and data analysis. Worked on ML projects using scikit-learn and TensorFlow.
